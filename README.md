@@ -1,118 +1,69 @@
-# Yet Another Generic Swerve Library (YAGSL) Example project
+# Robot Software Task Documentation
 
-YAGSL is intended to be an easy implementation of a generic swerve drive that should work for most
-square swerve drives. The project is documented
-on [here](https://github.com/BroncBotz3481/YAGSL/wiki). The JSON documentation can also be
-found [here](docs/START.md)
+This document provides a detailed overview of the robot software tasks and setup process for the team.  
+It explains how to prepare the development environment, structure the project, and manage subsystem assignments.
 
-This example is intended to be a starting place on how to use YAGSL. By no means is this intended to
-be the base of your robot project. YAGSL provides an easy way to generate a SwerveDrive which can be
-used in both TimedRobot and Command-Based Robot templates.
+---
 
+## 🧭 Overview
+This document serves as a guide for new and existing team members working on the robot’s software.  
+It outlines how to:
+- Set up the required tools and dependencies  
+- Clone and manage the project repository  
+- Understand the folder and code structure  
+- Collaborate effectively during development
 
-# Overview
+---
 
-### Installation
+## ⚙️ Initial Setup
 
-Vendor URL:
+### 1. Install WPILib
+Download and install the latest **WPILib** development environment:
+- Visit [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/index.html)
+- Make sure `VS Code` and the **FRC Plugin** are correctly configured.
 
-```
-https://broncbotz3481.github.io/YAGSL-Lib/yagsl/yagsl.json
-```
+### 2. Fork the Main Swerve Template
+- Go to the official **Main Swerve Template** repository on GitHub.  
+- Click **Fork** to create your own copy.  
+- Clone it locally to your development machine using:
+  ```bash
+  git clone https://github.com/Kelrot/junior-software-training-template.git
+  ```
 
-[Javadocs here](https://broncbotz3481.github.io/YAGSL/)  
-[Library here](https://github.com/BroncBotz3481/YAGSL/)  
-[Code here](https://github.com/BroncBotz3481/YAGSL/tree/main/swervelib)  
-[WIKI](https://github.com/BroncBotz3481/YAGSL/wiki)  
-[Config Generation](https://broncbotz3481.github.io/YAGSL-Example/)
+### 3. Open in VS Code
+Open the cloned folder in **VS Code (WPILib)** and ensure the Gradle build completes without errors.
 
-# Create an issue if there is any errors you find!
+---
 
-We will be actively montoring this and fix any issues when we can!
+## 🧩 Project Structure
 
-## Development
+The project is organized into the following main sections:
 
-* Development happens here on `YAGSL-Example`. `YAGSL` and `YAGSL-Lib` are updated on a nightly
-  basis.
+| Folder / Module | Description |
+| ---------------- | ------------ |
+| `src/main/java/frc/robot/` | Root directory for robot code |
+| `subsystems/` | Code for robot mechanisms (Drive, Elevator, Intake, etc.) |
+| `commands/` | Command-based logic controlling subsystems |
+| `constants/` | Contains configuration values (motor IDs, heights, speeds, etc.) |
+| `utils/` | Utility classes such as wrappers, logging, or math helpers |
 
-# Support our developers!
-<a href='https://ko-fi.com/yagsl' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Robot at ko-fi.com'></a>
+Each subsystem may be handled by a different team member, but integration and consistency are key.
 
-### TL;DR Generate and download your configuration [here](https://broncbotz3481.github.io/YAGSL-Example/) and unzip it so that it follows structure below:
+---
 
-```text
-deploy
-└── swerve
-    ├── controllerproperties.json
-    ├── modules
-    │   ├── backleft.json
-    │   ├── backright.json
-    │   ├── frontleft.json
-    │   ├── frontright.json
-    │   ├── physicalproperties.json
-    │   └── pidfproperties.json
-    └── swervedrive.json
-```
+## 🧠 Development Guidelines
 
-### Then create your SwerveDrive object like this.
+- Follow WPILib command-based design principles.  
+- Use constants for tunable parameters — avoid hardcoded values in logic.  
+- Commit frequently with meaningful messages.  
+- Use pull requests for reviewing and merging changes.  
+- Test each subsystem independently before full robot integration.
 
-```java
-import java.io.File;
-import edu.wpi.first.wpilibj.Filesystem;
-import swervelib.parser.SwerveParser;
-import swervelib.SwerveDrive;
-import edu.wpi.first.math.util.Units;
+---
 
+## 🧪 Simulation & Testing
 
-SwerveDrive swerveDrive=new SwerveParser(new File(Filesystem.getDeployDirectory(),"swerve")).createSwerveDrive(Units.feetToMeters(14.5));
-```
-
-# Migrating Old Configuration Files
-
-1. Delete `wheelDiamter`, `gearRatio`, `encoderPulsePerRotation` from `physicalproperties.json`
-2. Add `optimalVoltage` to `physicalproperties.json`
-3. Delete `maxSpeed` and `optimalVoltage` from `swervedrive.json`
-4. **IF** a swerve module doesn't have the same drive motor or steering motor as the rest of the
-   swerve drive you **MUST** specify a `conversionFactor` for BOTH the drive and steering motor in
-   the modules configuration JSON file. IF one of the motors is the same as the rest of the swerve
-   drive and you want to use that `conversionFactor`, set the `conversionFactor` in the module JSON
-   configuration to 0.
-5. You MUST specify the maximum speed when creating a `SwerveDrive`
-   through `new SwerveParser(directory).createSwerveDrive(maximumSpeed);`
-6. IF you do not want to set `conversionFactor` in `swervedrive.json`. You can pass it into the
-   constructor as a parameter like this
-
-```java
-double DriveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(WHEEL_DIAMETER), GEAR_RATIO, ENCODER_RESOLUTION);
-double SteeringConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(GEAR_RATIO, ENCODER_RESOLUTION);
-SwerveDrive swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, SteeringConversionFactor, DriveConversionFactor);
-```
-
-### Falcon Support would not have been possible without support from Team 1466 Webb Robotics!
-
-# Configuration Tips
-
-### My Robot Spins around uncontrollably during autonomous or when attempting to set the heading!
-
-* Invert the gyro scope.
-* Invert the drive motors for every module. (If front and back become reversed when turning)
-
-### Angle motors are erratic.
-
-* Invert the angle motor.
-
-### My robot is heavy.
-
-* Implement momentum velocity limitations in SwerveMath.
-
-### Ensure the IMU is centered on the robot
-
-# Maintainers
-- @thenetworkgrinch
-- @Technologyman00 
-
-# Special Thanks to Team 7900! Trial N' Terror
-Without the debugging and aid of Team 7900 the project could never be as stable or active as it is. 
-
-# YAGSL is based off Swerve Code from Team 95 in 2023
-Thank you to team 95! (Note: Since then YAGSL has turned into the ship of Theseus)
+1. Use **WPILib Simulation** to test robot behavior virtually.  
+2. Verify motor direction, PID control, and trigger mappings.  
+3. Once stable, deploy to the robot and validate physical performance.  
+4. Document results in the shared Google Docs file for tracking progress.
