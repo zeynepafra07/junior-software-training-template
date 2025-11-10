@@ -44,10 +44,8 @@ The project is organized into the following main sections:
 | `src/main/java/frc/robot/` | Root directory for robot code |
 | `subsystems/` | Code for robot mechanisms (Drive, Elevator, Intake, etc.) |
 | `commands/` | Command-based logic controlling subsystems |
-| `constants/` | Contains configuration values (motor IDs, heights, speeds, etc.) |
 | `utils/` | Utility classes such as wrappers, logging, or math helpers |
 
-Each subsystem may be handled by a different team member, but integration and consistency are key.
 
 ---
 
