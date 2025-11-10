@@ -1,0 +1,1 @@
+# junior-software-training-template
