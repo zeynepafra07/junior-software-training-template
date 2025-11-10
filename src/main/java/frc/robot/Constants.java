@@ -1,0 +1,141 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot;
+
+import com.pathplanner.lib.config.PIDConstants;
+
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import swervelib.math.Matter;
+
+/**
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean constants. This
+ * class should not be used for any other purpose. All constants should be
+ * declared globally (i.e. public static). Do
+ * not put anything functional in this class.
+ *
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
+ * constants are needed, to reduce verbosity.
+ */
+public final class Constants {
+
+  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
+  public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
+  public static final double MAX_SPEED = 5.15112;
+  // Maximum speed of the robot in meters per second, used to limit acceleration.
+
+  public static final class AutonConstants {
+
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+    public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
+  }
+
+  public static final class DrivebaseConstants {
+
+    // Hold time on motor brakes when disabled
+    public static final double WHEEL_LOCK_TIME = 10; // seconds
+  }
+
+  public static class OperatorConstants {
+
+    // Joystick Deadband
+    public static final double DEADBAND = 0.1;
+    public static final double LEFT_Y_DEADBAND = 0.1;
+    public static final double RIGHT_X_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT = 6;
+  }
+
+  public static class Elevator {
+    public static final int masterID = 1; // Both VORTEX
+    public static final int slaveID = 2; // They are inverted
+    // Throughbore encoder is connected on board of master motor controller. Set the
+    // encoder on SparkMaxConfig.
+
+    public static final double RPSperVolt = 7.9; // RPS increase with every volt
+    public static final double kP = 2.2; // output per unit of error in position (output/rotation)
+    public static final double kI = 0.0; // output per unit of integrated error in position (output/(rotation*s))
+    public static final double kD = 0.0; // output per unit of error in velocity (output/rps)
+    public static final double kS = 0.0; // output to overcome static friction (output)
+    public static final double kV = 1.0 / RPSperVolt; // output per unit of target velocity (output/rps)
+    public static final double kA = 0.0; // output per unit of target acceleration (output/(rps/s))
+    public static final double kG = 0.4; // output to overcome gravity
+    public static final double cruiseVelocity = 100.0; // RPS
+    public static final double acceleration = cruiseVelocity / 0.3; // Accelerate in 0.3 seconds
+  }
+
+  public static class Shooter {
+    /* IDs */
+    public static final int motorID = 3; // NEO v1.1 uses sparkmax
+    /* Motor Config Values */
+    public static final double peakForwardVoltage = 12.0;
+    public static final double peakReverseVoltage = -12.0;
+    /* Motor Control Values */
+    public static final double feedVoltage = -6.5;
+    public static final double advanceVoltage = -1.9;
+    public static final double scoreL1Voltage = -3.5;
+    public static final double scoreL2L3Voltage = -6.0; // was -9.0 for standoff
+    public static final double scoreL4Voltage = -6.0;
+    public static final double algaeVoltage = 3.3;
+    public static final double algaeHoldVoltage = 1.2;
+    public static final double algaeBargeVoltage = -12.0;
+    public static final double algaeOutVoltage = -4.0;
+
+  }
+
+  public static class Intake {
+    /* IDs */
+    public static final int motorID = 4; // NEO v1.1 uses sparkmax
+    public static final int sensorID = 2; // Digital Input for coral detection
+    /* Motor Config Values */
+    public static final double peakForwardVoltage = 12.0;
+    public static final double peakReverseVoltage = -12.0;
+    /* Motor Control Values */
+    public static final double intakeVoltage = -2.00;
+    public static final double rejectVoltage = 0.50; // Reject the coral - outtake
+  }
+
+  public static class Climb {
+    public static final class Climber {
+      /* IDs */
+      public static final int motorID = 5;
+      /* Motor Config Values */
+      public static final double peakForwardVoltage = 12.0;
+      public static final double peakReverseVoltage = -12.0;
+      /* Motor Control Values */
+      public static final double fastDeployVoltage = 12.0;
+      public static final double slowDeployVoltage = 3.0;
+      public static final double engageRetractVoltage = -4.0;
+      public static final double fastRetractVoltage = -12.0;
+      public static final double slowRetractVoltage = -3.0;
+      public static final double holdVoltage = -0.5;
+    }
+
+    public static class Levels {
+      public static final double bellyHeight = 0.755; // Height of the top surface of the belly pan from the ground
+      public static final double baseHeight = 12.0 + bellyHeight; // Height of elevator in inches when it is at zero
+                                                                  // position
+                                                                  // Set the throughbore 12 because it is mounted that high
+      public static final double maxHeight = 72.0 + bellyHeight; // Height that elevator should never exceed
+      public static final double endEffectorHeight = 6.0; // Height of end effector "target" above elevator height
+
+      public static final double SAFE = baseHeight + 5.0;
+      public static final double L1 = 21.3 - endEffectorHeight;
+      public static final double L1_SCORE = 33.0 - endEffectorHeight;
+      public static final double HOLD = 30.0 - endEffectorHeight;
+      public static final double L2 = 34.5 - endEffectorHeight;
+      public static final double L2_ALGAE = 38.0 - endEffectorHeight;
+      public static final double L3 = 49.5 - endEffectorHeight;
+      public static final double L3_ALGAE = 53.5 - endEffectorHeight;
+      public static final double ALGAE_RELEASE = 63.5 - endEffectorHeight;
+      public static final double L4 = 74.5 - endEffectorHeight;
+      public static final double L4_SCORE = 77.0 - endEffectorHeight;
+    }
+
+  }
+}
