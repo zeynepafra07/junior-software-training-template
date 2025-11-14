@@ -1,0 +1,62 @@
+package frc.robot.subsystems;
+
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DigitalInput;
+
+import frc.robot.Constants.Intake;
+
+public class IntakeSubsystem extends SubsystemBase {
+    public SparkMax intakeMotor;
+    public SparkMaxConfig intakeConfig;
+    private DigitalInput intakeSensor;
+
+    public IntakeSubsystem(){
+        intakeMotor = new SparkMax(Constants.Intake.intakeMotorID, MotorType.kBrushless);
+        intakeConfig = new SparkMaxConfig();
+        intakeSensor = new DigitalInput(Constants.Intake.sensorID);
+        configureMotor();
+
+    }
+
+    public void setVoltage(double voltage){
+        double finVoltage = MathUtil.clamp(voltage, Constants.Intake.peakReverseVoltage, Constants.Intake.peakForwardVoltage);
+
+        intakeMotor.setVoltage(finVoltage);
+    }
+
+    public void intake(){
+        setVoltage(Constants.Intake.intakeVoltage);
+    }
+
+    public void outtake(){
+        setVoltage(Constants.Intake.rejectVoltage);
+    }
+
+    public void stop(){
+        intakeMotor.stopMotor();
+    }
+
+    public boolean hasCoral(){
+        return !coralSensor.get();
+    }
+
+    public void configureMotor(){
+        intakeConfig.restoreFactoryDefaults().idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(30).closedLoop
+        .apply(closedLoopConfig);
+    }
+
+    @Override
+    public void periodic() {
+        //later
+    }
+}
