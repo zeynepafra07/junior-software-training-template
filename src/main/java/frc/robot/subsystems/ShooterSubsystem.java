@@ -32,23 +32,23 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void feed(){
-        shooterMotor.setVoltage(Constants.Shooter.feedVoltage);
+        setVoltage(Constants.Shooter.feedVoltage);
     }
 
     public void advance(){
-        shooterMotor.setVoltage(Constants.Shooter.advanceVoltage);
+        setVoltage(Constants.Shooter.advanceVoltage);
     }
 
     public void shootL1(){
-        shooterMotor.setVoltage(Constants.Shooter.scoreL1Voltage);
+        setVoltage(Constants.Shooter.scoreL1Voltage);
     }
 
     public void shootL23(){
-        shooterMotor.setVoltage(Constants.Shooter.scoreL2L3Voltage);
+        setVoltage(Constants.Shooter.scoreL2L3Voltage);
     }
 
     public void shootL4(){
-        shooterMotor.setVoltage(Constants.Shooter.scoreL4Voltage);
+        setVoltage(Constants.Shooter.scoreL4Voltage);
     }
 
     public void algaeIntake(){
@@ -56,15 +56,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void algaeOuttake(){
-        shooterMotor.setVoltage(Constants.Shooter.algaeOutVoltage);
+        setVoltage(Constants.Shooter.algaeOutVoltage);
     }
 
     public void holdAlgae(){
-        shooterMotor.setVoltage(Constants.Shooter.algaeHoldVoltage);
+        setVoltage(Constants.Shooter.algaeHoldVoltage);
     }
 
     public void shootAlgaeBarge(){
-        shooterMotor.setVoltage(Constants.Shooter.algaeBargeVoltage);
+        setVoltage(Constants.Shooter.algaeBargeVoltage);
     }
 
     public void 

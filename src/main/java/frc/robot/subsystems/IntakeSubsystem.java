@@ -18,7 +18,6 @@ import frc.robot.Constants.Intake;
 public class IntakeSubsystem extends SubsystemBase {
     public SparkMax intakeMotor;
     public SparkMaxConfig intakeConfig;
-    public 
     private DigitalInput intakeSensor;
 
     public IntakeSubsystem(){
