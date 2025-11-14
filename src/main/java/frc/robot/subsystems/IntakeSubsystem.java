@@ -18,6 +18,7 @@ import frc.robot.Constants.Intake;
 public class IntakeSubsystem extends SubsystemBase {
     public SparkMax intakeMotor;
     public SparkMaxConfig intakeConfig;
+    public 
     private DigitalInput intakeSensor;
 
     public IntakeSubsystem(){
@@ -51,8 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(){
-        intakeConfig.restoreFactoryDefaults().idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(30).closedLoop
-        .apply(closedLoopConfig);
+        intakeConfig.restoreFactoryDefaults().idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(30);
     }
 
     @Override
