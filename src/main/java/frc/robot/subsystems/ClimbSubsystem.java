@@ -57,7 +57,8 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(){
-        climbConfig.restoreFactoryDefaults().idleMode(IdleMode.kBrake).voltageCompensation(12.0).smartCurrentLimit(40);
+        climbConfig.idleMode(IdleMode.kBrake).voltageCompensation(12.0).smartCurrentLimit(40);
+        climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override

@@ -73,7 +73,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(){
-        shooterConfig.restoreFactoryDefaults().idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(40);
+        shooterConfig.idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(40);
+        shooterMotor.configure(shooterConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override

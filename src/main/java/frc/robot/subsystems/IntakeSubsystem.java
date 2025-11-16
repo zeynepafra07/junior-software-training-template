@@ -51,7 +51,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(){
-        intakeConfig.restoreFactoryDefaults().idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(30);
+        intakeConfig.idleMode(IdleMode.kCoast).voltageCompensation(12.0).smartCurrentLimit(30);
+        intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     @Override
