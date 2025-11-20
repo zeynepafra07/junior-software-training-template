@@ -6,6 +6,8 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class L1Shooting extends SequentialCommandGroup {
     private final ShooterSubsystem shooterSub;
