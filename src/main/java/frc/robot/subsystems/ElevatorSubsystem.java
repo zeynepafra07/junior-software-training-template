@@ -50,6 +50,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     }
 
+    public boolean isAtPosition(double position){
+        double tolerance = 0.1;
+        return Math.abs(encoder.getPosition() - position) < tolerance;
+    }
+
     public void moveManual(double voltage){
         masterMotor.setVoltage(voltage);
     }
@@ -80,7 +85,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public Command reachPosition(double position){
-        return runOnce(() -> setPosition(position)).withName("Elevator Reach Position");
+        return runOnce(() -> setPosition(position)).until(() -> isAtPosition(position));
     }
 
 }

@@ -66,8 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shootAlgaeBarge(){
         setVoltage(Constants.Shooter.algaeBargeVoltage);
     }
-
-    public void 
+ 
     public void stop(){
         shooterMotor.stopMotor();
     }
