@@ -32,6 +32,14 @@ public class ClimbSubsystem extends SubsystemBase {
         climbMotor.setVoltage(finVoltage);
     }
 
+    public ClimbMode getMode(){
+        return currentMode;
+    }
+
+    public void setMode(ClimbMode mode){
+        currentMode = mode;
+    }
+
     public void openClimbFast(){
         setVoltage(Constants.Climb.Climber.fastDeployVoltage);
     }
@@ -48,7 +56,7 @@ public class ClimbSubsystem extends SubsystemBase {
         setVoltage(Constants.Climb.Climber.slowRetractVoltage);
     }
 
-    public void closeClimb(){
+    public void closeClimbNormal(){
         setVoltage(Constants.Climb.Climber.engageRetractVoltage);
     }
 

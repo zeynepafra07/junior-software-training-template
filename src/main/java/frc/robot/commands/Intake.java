@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class intakeCommand extends Command{
+public class Intake extends Command{
     private final IntakeSubsystem intakeSub;
     private final Timer timer;
     private final timerOn, finished;
     private final holdTime = 12.0; //unknown change later
 
-    public intakeCommand(IntakeSubsystem intakeSub) {
+    public Intake(IntakeSubsystem intakeSub) {
         this.intakeSub = intakeSub;
         timer = new Timer();
 
