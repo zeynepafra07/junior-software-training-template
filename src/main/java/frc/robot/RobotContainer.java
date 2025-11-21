@@ -15,6 +15,22 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.climb.ClimbSubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.commands.CloseClimb;
+import frc.robot.commands.OpenClimb;
+import frc.robot.commands.getL2ALgae;
+import frc.robot.commands.getL3ALgae;
+import frc.robot.commands.Intake;
+import frc.robot.commands.Outtake;
+import frc.robot.commands.L1Shooting;
+import frc.robot.commands.L2Shooting;
+import frc.robot.commands.L3Shooting;
+import frc.robot.commands.L4Shooting;
+import frc.robot.commands.shootAlgaeToBarge;
+import frc.robot.commands.shootAlgaetoNet;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -31,6 +47,22 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+                                                                                private final ClimbSubsystem climb = new ClimbSubsystem();
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();
+  private final IntakeSubsystem intake = new IntakeSubsystem();
+  private final ShooterSubsystem shooter = new ShooterSubsystem();
+  private final Command closeClimbCommand = new closeClimb(climb);
+  private final Command openClimbCommand = new openClimb(climb, elevator);
+  private final Command getL2ALgaeCommand = new getL2ALgae(shooter, elevator);
+  private final Command getL3ALgaeCommand = new getL3ALgae(shooter, elevator);
+  private final Command intakeCommand = new Intake(intake);
+  private final Command outtakeCommand = new Outtake(intake);
+  private final Command L1ShootCommand = new L1Shooting(shooter, elevator);
+  private final Command L2ShootCommand = new L2Shooting(shooter, elevator);
+  private final Command L3ShootCommand = new L3Shooting(shooter, elevator);
+  private final Command L4ShootCommand = new L4Shooting(shooter, elevator);
+  private final Command shootAlgaeBargeCommand = new shootAlgaeToBarge(shooter, elevator);
+  private final Command shootAlgaetoNetCommand = new shootAlgaetoNet(shooter, elevator);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -84,6 +116,9 @@ public class RobotContainer
                                                                                .headingOffset(true)
                                                                                .headingOffset(Rotation2d.fromDegrees(
                                                                                    0));
+  
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -145,6 +180,19 @@ public class RobotContainer
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }
+
+    driverXbox.button(1).onTrue(intakeCommand);
+    driverXbox.button(2).onTrue(outtakeCommand);
+    driverXbox.button(3).onTrue(closeClimbCommand);
+    driverXbox.button(4).onTrue(openClimbCommand);
+    driverXbox.button(5).onTrue(getL2ALgaeCommand);
+    driverXbox.button(6).onTrue(getL3ALgaeCommand);
+    driverXbox.button(7).onTrue(L1ShootCommand);
+    driverXbox.button(8).onTrue(L2ShootCommand);
+    driverXbox.button(9).onTrue(L3ShootCommand);
+    driverXbox.button(10).onTrue(L4ShootCommand);
+    driverXbox.button(11).onTrue(shootAlgaeBargeCommand);
+    driverXbox.button(12).onTrue(shootAlgaetoNetCommand);
 
   }
 

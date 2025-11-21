@@ -78,6 +78,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //later
+        SmartDashboard.putNumber("Shooter Voltage", shooterMotor.getAppliedOutput());
     }
 }

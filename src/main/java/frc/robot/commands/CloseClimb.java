@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class CloseClimb extends Commad{
+public class closeClimb extends Commad{
     private final ClimbSubsystem climbSub;
 
-    public OpenClimb(ClimbSubsystem climbSub) {
+    public closeClimb(ClimbSubsystem climbSub) {
         this.climbSub = climbSub;
 
         addRequirements(climbSub);

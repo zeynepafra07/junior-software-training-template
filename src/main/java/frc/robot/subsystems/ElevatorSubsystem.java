@@ -82,7 +82,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-//
+        SmartDashboard.putNumber("Elevator Actual Position", encoder.getPosition());
+        SmartDashboard.putNumber("Elevator Target Position", closedLoopController.getReferenceValue());
+        SmartDashboard.putNumber("Elevator Voltage", masterMotor.getAppliedOutput());
     }
 
     public Command reachPosition(double position){

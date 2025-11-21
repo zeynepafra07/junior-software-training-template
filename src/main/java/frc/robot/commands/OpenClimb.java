@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class OpenClimb extends command{
+public class openClimb extends command{
     private final ClimbSubsystem climbSub;
     private final ElevatorSubsystem elevatorSub;
 
-    public OpenClimb(ClimbSubsystem climbSub, ElevatorSubsystem elevatorSub) {
+    public openClimb(ClimbSubsystem climbSub, ElevatorSubsystem elevatorSub) {
         this.climbSub = climbSub;
         this.elevatorSub = elevatorSub;
 
