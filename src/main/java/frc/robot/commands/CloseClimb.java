@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class closeClimb extends Commad{
+public class closeClimb extends CommadBase{
     private final ClimbSubsystem climbSub;
 
     public closeClimb(ClimbSubsystem climbSub) {

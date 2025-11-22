@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class openClimb extends command{
+public class openClimb extends CommandBase{
     private final ClimbSubsystem climbSub;
     private final ElevatorSubsystem elevatorSub;
 
@@ -27,7 +27,7 @@ public class openClimb extends command{
 
     @Override
     public void execute(){
-        climbSub.openClimbFast();
+        climbSub.openClimb();
     }
 
     @Override

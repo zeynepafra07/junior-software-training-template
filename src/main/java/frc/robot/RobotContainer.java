@@ -31,6 +31,10 @@ import frc.robot.commands.L3Shooting;
 import frc.robot.commands.L4Shooting;
 import frc.robot.commands.shootAlgaeToBarge;
 import frc.robot.commands.shootAlgaetoNet;
+import frc.robot.commands.NormalMode;
+import frc.robot.commands.FastMode;
+import frc.robot.commands.SlowMode;
+import frc.robot.commands.ResetEncoder;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -63,6 +67,10 @@ public class RobotContainer
   private final Command L4ShootCommand = new L4Shooting(shooter, elevator);
   private final Command shootAlgaeBargeCommand = new shootAlgaeToBarge(shooter, elevator);
   private final Command shootAlgaetoNetCommand = new shootAlgaetoNet(shooter, elevator);
+  private final Command normalModeCommand = new NormalMode(climb);
+  private final Command fastModeCommand = new FastMode(climb);
+  private final Command slowModeCommand = new SlowMode(climb);
+  private final Command resetEncoderCommand = new ResetEncoder(elevator);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -173,26 +181,23 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.none());
+      driverXbox.a().onTrue(shootAlgaeToBargeCommand);
+      driverXbox.b().onTrue(getL3ALgaeCommand);
+      driverXbox.x().onTrue(getL2ALgaeCommand);
+      driverXbox.y().onTrue(shootAlgaetoNetCommand);
+      driverXbox.start().whileTrue(fastModeCommand);
+      driverXbox.back().whileTrue(slowModeCommand);
+      driverXbox.leftBumper().onTrue(L1ShootCommand);
+      driverXbox.rightBumper().onTrue(L3ShootCommand);
+      driverXbox.rightTrigger().onTrue(L2ShootCommand);
+      driverXbox.leftTrigger().onTrue(L4ShootCommand);
+      driverXbox.povUp().onTrue(intakeCommand);
+      driverXbox.povDown().onTrue(outtakeCommand);
+      driverXbox.povRight().onTrue(openClimbCommand);
+      driverXbox.povLeft().onTrue(closeClimbCommand);
+      driverXbox.leftStick().onTrue(resetEncoderCommand);
+      driverXbox.rightStick().onTrue(normalModeCommand);
     }
-
-    driverXbox.button(1).onTrue(intakeCommand);
-    driverXbox.button(2).onTrue(outtakeCommand);
-    driverXbox.button(3).onTrue(closeClimbCommand);
-    driverXbox.button(4).onTrue(openClimbCommand);
-    driverXbox.button(5).onTrue(getL2ALgaeCommand);
-    driverXbox.button(6).onTrue(getL3ALgaeCommand);
-    driverXbox.button(7).onTrue(L1ShootCommand);
-    driverXbox.button(8).onTrue(L2ShootCommand);
-    driverXbox.button(9).onTrue(L3ShootCommand);
-    driverXbox.button(10).onTrue(L4ShootCommand);
-    driverXbox.button(11).onTrue(shootAlgaeBargeCommand);
-    driverXbox.button(12).onTrue(shootAlgaetoNetCommand);
 
   }
 

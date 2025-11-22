@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class Intake extends Command{
+public class Intake extends CommandBase{
     private final IntakeSubsystem intakeSub;
     private final Timer timer;
     private final timerOn, finished;
