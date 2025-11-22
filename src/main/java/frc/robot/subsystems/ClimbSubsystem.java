@@ -4,6 +4,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.math.MathUtil;
 
 import frc.robot.Constants.Climb;
 
@@ -19,6 +21,7 @@ import frc.robot.Constants.Climb;
 public class ClimbSubsystem extends SubsystemBase {
     public SparkMax climbMotor;
     public SparkMaxConfig climbConfig;
+    public int climbMode = 1;
 
     public ClimbSubsystem(){
         climbMotor = new SparkMax(Constants.Climb.Climber.motorID, MotorType.kBrushless);
@@ -40,6 +43,17 @@ public class ClimbSubsystem extends SubsystemBase {
         setVoltage(Constants.Climb.Climber.slowDeployVoltage);
     }
 
+    public void openClimb(){
+        if(climbMode == 0){
+            openClimbSlow();
+        } else if(climbMode == 1){ 
+            openClimbFast();
+        }
+        else{
+            openClimbFast();
+        }
+    }
+
     public void closeClimbFast(){
         setVoltage(Constants.Climb.Climber.fastRetractVoltage);
     }
@@ -50,6 +64,17 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public void closeClimbNormal(){
         setVoltage(Constants.Climb.Climber.engageRetractVoltage);
+    }
+
+    public void closeClimb(){
+        if(climbMode == 0){
+            closeClimbSlow();
+        } else if(climbMode == 1){ 
+            closeClimbNormal();
+        }
+        else{
+            closeClimbFast();
+        }
     }
 
     public void holdClimb(){

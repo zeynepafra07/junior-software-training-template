@@ -29,7 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private final SparkClosedLoopController closedLoopController;
     private final ClosedLoopConfig closedLoopConfig;
-    private final double gearratio = 10.71; //Gear ratio is unknown, change later
+    private final double gearratio = 24;
 
     public ElevatorSubsystem(){
         masterMotor = new SparkFlex(Constants.Elevator.masterID, MotorType.kBrushless);
