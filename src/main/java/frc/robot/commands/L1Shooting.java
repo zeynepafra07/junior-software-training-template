@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.Constants;
@@ -20,13 +19,13 @@ public class L1Shooting extends SequentialCommandGroup {
         addRequirements(shooterSub, elevatorSub);
 
         addCommands(
-            elevatorSub.setPosition(Constants.Climb.Levels.L1_SCORE).withTimeout(1),
+            elevatorSub.reachPosition(Constants.Climb.Levels.L1_SCORE).withTimeout(1),
             new InstantCommand(() -> shooterSub.feed(), shooterSub),
             new WaitCommand(0.1),
             new InstantCommand(() -> shooterSub.shootL1(), shooterSub),
             new WaitCommand(0.7),
             new InstantCommand(() -> shooterSub.stop(), shooterSub),
-            elevatorSub.setPosition(Constants.Climb.Levels.SAFE).withTimeout(3);
+            elevatorSub.reachPosition(Constants.Climb.Levels.SAFE).withTimeout(3)
         );
     }
 }

@@ -1,20 +1,19 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.Constants;
 
-public class NormalMode extends CommandBase{
+public class FastMode extends Command{
     private final ClimbSubsystem climbSub;
 
-    public NormalMode(ClimbSubsystem climbSub) {
+    public FastMode(ClimbSubsystem climbSub) {
         this.climbSub = climbSub;
         addRequirements(climbSub);
     }
 
     @Override
     public void initialize() {
-        climbSub.climbMode = 2;
+        climbSub.climbMode = 1;
     }
 
     @Override

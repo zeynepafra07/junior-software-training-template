@@ -17,15 +17,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.climb.ClimbSubsystem;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import frc.robot.commands.CloseClimb;
 import frc.robot.commands.OpenClimb;
-import frc.robot.commands.GetL2ALgae;
-import frc.robot.commands.GetL3ALgae;
+import frc.robot.commands.GetL2Algae;
+import frc.robot.commands.GetL3Algae;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.L1Shooting;
@@ -34,7 +34,6 @@ import frc.robot.commands.L3Shooting;
 import frc.robot.commands.L4Shooting;
 import frc.robot.commands.ShootAlgaeToBarge;
 import frc.robot.commands.ShootAlgaetoNet;
-import frc.robot.commands.NormalMode;
 import frc.robot.commands.FastMode;
 import frc.robot.commands.SlowMode;
 import frc.robot.commands.ResetEncoder;
@@ -46,7 +45,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.HashMap;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -63,14 +61,15 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-                                                                                private final ClimbSubsystem climb = new ClimbSubsystem();
+                                                                                
+  private final ClimbSubsystem climb = new ClimbSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
   private final Command closeClimbCommand = new CloseClimb(climb);
   private final Command openClimbCommand = new OpenClimb(climb, elevator);
-  private final Command getL2ALgaeCommand = new GetL2ALgae(shooter, elevator);
-  private final Command getL3ALgaeCommand = new GetL3ALgae(shooter, elevator);
+  private final Command getL2ALgaeCommand = new GetL2Algae(shooter, elevator);
+  private final Command getL3ALgaeCommand = new GetL3Algae(shooter, elevator);
   private final Command intakeCommand = new Intake(intake);
   private final Command outtakeCommand = new Outtake(intake);
   private final Command L1ShootCommand = new L1Shooting(shooter, elevator);
@@ -79,12 +78,12 @@ public class RobotContainer
   private final Command L4ShootCommand = new L4Shooting(shooter, elevator);
   private final Command shootAlgaeBargeCommand = new ShootAlgaeToBarge(shooter, elevator);
   private final Command shootAlgaetoNetCommand = new ShootAlgaetoNet(shooter, elevator);
-  private final Command normalModeCommand = new NormalMode(climb);
   private final Command fastModeCommand = new FastMode(climb);
   private final Command slowModeCommand = new SlowMode(climb);
   private final Command resetEncoderCommand = new ResetEncoder(elevator);
 
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -119,6 +118,7 @@ public class RobotContainer
                                                                     .scaleTranslation(0.8)
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
+  
   SwerveInputStream driveDirectAngleKeyboard     = driveAngularVelocityKeyboard.copy()
                                                                                .withControllerHeadingAxis(() ->
                                                                                                               Math.sin(
@@ -138,24 +138,7 @@ public class RobotContainer
                                                                                .headingOffset(true)
                                                                                .headingOffset(Rotation2d.fromDegrees(
                                                                                    0));
-  
 
-
-
-  AutoBuilder.configureHolonomic(
-    (Pose2d targetPose, Command command) -> drivebase.driveToPoseCommand(targetPose),
-    (Pose2d initialPose) -> drivebase.resetOdometry(initialPose),
-    drivebase::getPose,
-    () -> {
-      var alliance = DriverStation.getAlliance();
-      if(alliance.isPresent())
-      {
-        return alliance.get() ==  DriverStation.Alliance.Blue;
-      }
-      return false;
-    },
-    drivebase
-    );
 
   public RobotContainer()
   {
@@ -164,25 +147,25 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(true);
 
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-
     NamedCommands.registerCommand("Intake Command", new Intake(intake));
     NamedCommands.registerCommand("L4 Shoot Command", new L4Shooting(shooter, elevator));
 
-    Command auto1 = AutoBuilder.buildAutoCommand("Blue_1", drivebase, true);
-    Command auto2 = AutoBuilder.buildAutoCommand("Blue_2", drivebase, true);
-    Command auto3 = AutoBuilder.buildAutoCommand("Blue_3", drivebase, true);
-    Command auto4 = AutoBuilder.buildAutoCommand("Red_1", drivebase, true);
-    Command auto5 = AutoBuilder.buildAutoCommand("Red_2", drivebase, true);
-    Command auto6 = AutoBuilder.buildAutoCommand("Red_3", drivebase, true);
-
+    Command auto1 = drivebase.getAutonomousCommand("Blue_1");
+    Command auto2 = drivebase.getAutonomousCommand("Blue_2");
+    Command auto3 = drivebase.getAutonomousCommand("Blue_3"); 
+    Command auto4 = drivebase.getAutonomousCommand("Red_1"); 
+    Command auto5 = drivebase.getAutonomousCommand("Red_2");
+    Command auto6 = drivebase.getAutonomousCommand("Red_3");
+    
     autoChooser.setDefaultOption("Blue Auto 1", auto1);
     autoChooser.addOption("Blue Auto 2", auto2);
     autoChooser.addOption("Blue Auto 3", auto3);
     autoChooser.addOption("Red Auto 1", auto4);
     autoChooser.addOption("Red Auto 2", auto5);
     autoChooser.addOption("Red Auto 3", auto6);
-    SmartDashboard.putData("Auto Chooser", autoChooser);
     
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  
   }
 
   /**
@@ -207,7 +190,7 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
-      elevator.setDefaultCommand(elevator.simulationPeriodic());
+      elevator.setDefaultCommand(elevator.simulationCommand());
     }
     
     if (DriverStation.isTest())
@@ -222,7 +205,7 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      driverXbox.a().onTrue(shootAlgaeToBargeCommand);
+      driverXbox.a().onTrue(shootAlgaeBargeCommand);
       driverXbox.b().onTrue(getL3ALgaeCommand);
       driverXbox.x().onTrue(getL2ALgaeCommand);
       driverXbox.y().onTrue(shootAlgaetoNetCommand);
@@ -237,7 +220,7 @@ public class RobotContainer
       driverXbox.povRight().onTrue(openClimbCommand);
       driverXbox.povLeft().onTrue(closeClimbCommand);
       driverXbox.leftStick().onTrue(resetEncoderCommand);
-      driverXbox.rightStick().onTrue(normalModeCommand);
+      
     }
 
   }
@@ -247,10 +230,14 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
+  
   public Command getAutonomousCommand()
   {
+
     return autoChooser.getSelected();
+ 
   }
+  
 
   public void setMotorBrake(boolean brake)
   {

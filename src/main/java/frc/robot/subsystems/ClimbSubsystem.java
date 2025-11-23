@@ -2,17 +2,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.math.MathUtil;
 
 import frc.robot.Constants.Climb;
@@ -24,61 +19,55 @@ public class ClimbSubsystem extends SubsystemBase {
     public int climbMode = 1;
 
     public ClimbSubsystem(){
-        climbMotor = new SparkMax(Constants.Climb.Climber.motorID, MotorType.kBrushless);
+        climbMotor = new SparkMax(Climb.Climber.motorID, SparkMax.MotorType.kBrushless);
         climbConfig = new SparkMaxConfig();
         configureMotor();
     }
 
     public void setVoltage(double voltage){
-        double finVoltage = MathUtil.clamp(voltage, Constants.Climb.Climber.peakReverseVoltage, Constants.Climb.Climber.peakForwardVoltage);
+        double finVoltage = MathUtil.clamp(voltage, Climb.Climber.peakReverseVoltage, Climb.Climber.peakForwardVoltage);
 
         climbMotor.setVoltage(finVoltage);
     }
 
     public void openClimbFast(){
-        setVoltage(Constants.Climb.Climber.fastDeployVoltage);
+        setVoltage(Climb.Climber.fastDeployVoltage);
     }
 
     public void openClimbSlow(){
-        setVoltage(Constants.Climb.Climber.slowDeployVoltage);
+        setVoltage(Climb.Climber.slowDeployVoltage);
     }
 
     public void openClimb(){
-        if(climbMode == 0){
+        if(climbMode == 1){
+            openClimbFast();
+        } else if (climbMode == 0){
             openClimbSlow();
-        } else if(climbMode == 1){ 
-            openClimbFast();
-        }
-        else{
-            openClimbFast();
         }
     }
 
     public void closeClimbFast(){
-        setVoltage(Constants.Climb.Climber.fastRetractVoltage);
+        setVoltage(Climb.Climber.fastRetractVoltage);
     }
 
     public void closeClimbSlow(){
-        setVoltage(Constants.Climb.Climber.slowRetractVoltage);
-    }
-
-    public void closeClimbNormal(){
-        setVoltage(Constants.Climb.Climber.engageRetractVoltage);
+        setVoltage(Climb.Climber.slowRetractVoltage);
     }
 
     public void closeClimb(){
-        if(climbMode == 0){
-            closeClimbSlow();
-        } else if(climbMode == 1){ 
-            closeClimbNormal();
-        }
-        else{
+        if(climbMode == 1){
             closeClimbFast();
+        } else if (climbMode == 0){
+            closeClimbSlow();
         }
     }
 
+    public void engageClimb(){
+        setVoltage(Climb.Climber.engageRetractVoltage);
+    }
+
     public void holdClimb(){
-        setVoltage(Constants.Climb.Climber.holdVoltage);
+        setVoltage(Climb.Climber.holdVoltage);
     }
 
     public void configureMotor(){
@@ -90,10 +79,4 @@ public class ClimbSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Climb Motor Voltage", climbMotor.getAppliedOutput());
     }
-
-    @Override
-    public void close() {
-        climbMotor.close();
-    }
-
 }

@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.Constants;
@@ -9,24 +8,24 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class L1Shooting extends SequentialCommandGroup {
+public class L4Shooting extends SequentialCommandGroup {
     private final ShooterSubsystem shooterSub;
     private final ElevatorSubsystem elevatorSub;
 
-    public L1Shooting(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
+    public L4Shooting(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
         this.shooterSub = shooterSub;
         this.elevatorSub = elevatorSub;
 
         addRequirements(shooterSub, elevatorSub);
 
         addCommands(
-            elevatorSub.setPosition(Constants.Climb.Levels.L4_SCORE).withTimeout(1),
+            elevatorSub.reachPosition(Constants.Climb.Levels.L4_SCORE).withTimeout(1),
             new InstantCommand(() -> shooterSub.feed(), shooterSub),
             new WaitCommand(0.1),
             new InstantCommand(() -> shooterSub.shootL4(), shooterSub),
             new WaitCommand(0.7),
             new InstantCommand(() -> shooterSub.stop(), shooterSub),
-            elevatorSub.setPosition(Constants.Climb.Levels.SAFE),
+            elevatorSub.reachPosition(Constants.Climb.Levels.SAFE),
             new WaitCommand(0.5)
         );
     }

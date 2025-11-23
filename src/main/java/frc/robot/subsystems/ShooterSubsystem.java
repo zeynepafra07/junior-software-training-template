@@ -2,17 +2,12 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.math.MathUtil;
 
 import frc.robot.Constants.Shooter;
@@ -22,51 +17,51 @@ public class ShooterSubsystem extends SubsystemBase {
     public SparkMaxConfig shooterConfig;
 
     public ShooterSubsystem(){
-        masterMotor = new SparkMax(Shooter.motorID, MotorType.kBrushless);
+        shooterMotor = new SparkMax(Shooter.motorID, SparkMax.MotorType.kBrushless);
         shooterConfig = new SparkMaxConfig();
         configureMotor();
     }
 
     public void setVoltage(double voltage){
-        double finVoltage = MathUtil.clamp(voltage, Constants.Shooter.peakReverseVoltage, Constants.Shooter.peakForwardVoltage);
+        double finVoltage = MathUtil.clamp(voltage, Shooter.peakReverseVoltage, Shooter.peakForwardVoltage);
 
         shooterMotor.setVoltage(finVoltage);
     }
 
     public void feed(){
-        setVoltage(Constants.Shooter.feedVoltage);
+        setVoltage(Shooter.feedVoltage);
     }
 
     public void advance(){
-        setVoltage(Constants.Shooter.advanceVoltage);
+        setVoltage(Shooter.advanceVoltage);
     }
 
     public void shootL1(){
-        setVoltage(Constants.Shooter.scoreL1Voltage);
+        setVoltage(Shooter.scoreL1Voltage);
     }
 
     public void shootL23(){
-        setVoltage(Constants.Shooter.scoreL2L3Voltage);
+        setVoltage(Shooter.scoreL2L3Voltage);
     }
 
     public void shootL4(){
-        setVoltage(Constants.Shooter.scoreL4Voltage);
+        setVoltage(Shooter.scoreL4Voltage);
     }
 
     public void algaeIntake(){
-        shooterMotor.setVoltage(Constants.Shooter.algaeVoltage);
+        shooterMotor.setVoltage(Shooter.algaeVoltage);
     }
 
     public void algaeOuttake(){
-        setVoltage(Constants.Shooter.algaeOutVoltage);
+        setVoltage(Shooter.algaeOutVoltage);
     }
 
     public void holdAlgae(){
-        setVoltage(Constants.Shooter.algaeHoldVoltage);
+        setVoltage(Shooter.algaeHoldVoltage);
     }
 
     public void shootAlgaeBarge(){
-        setVoltage(Constants.Shooter.algaeBargeVoltage);
+        setVoltage(Shooter.algaeBargeVoltage);
     }
  
     public void stop(){
@@ -81,10 +76,5 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Voltage", shooterMotor.getAppliedOutput());
-    }
-
-    @Override
-    public void close() {
-        shooterMotor.close();
     }
 }

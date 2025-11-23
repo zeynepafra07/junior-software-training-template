@@ -1,19 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.Constants;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-
-public class Intake extends CommandBase{
+public class Intake extends Command{
     private final IntakeSubsystem intakeSub;
-    private final Timer timer;
-    private final timerOn, finished;
-    private final holdTime = 1.5;
+    private Timer timer;
+    private boolean timerOn, finished;
+    private double holdTime = 1.5;
 
     public Intake(IntakeSubsystem intakeSub) {
         this.intakeSub = intakeSub;
@@ -23,7 +18,7 @@ public class Intake extends CommandBase{
     }
 
     @Override
-    public initialize(){
+    public void initialize(){
         timer.reset();
         timer.start();
         timerOn = false;

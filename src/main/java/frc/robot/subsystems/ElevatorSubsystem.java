@@ -9,23 +9,20 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.SparkFlex.MotorType;
-import com.revrobotics.spark.encoder.RelativeEncoder;
-
-
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
-import frc.robot.Constants.Elevator;
-import frc.robot.Constants.Climb.Levels;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import edu.wpi.first.wpilibj.simulation.SparkFlexSim;
+import com.revrobotics.sim.SparkFlexSim;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.mechanism2d.Mechanism2d;
-import edu.wpi.first.wpilibj.mechanism2d.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
@@ -38,34 +35,45 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final RelativeEncoder encoder;
 
     private final SparkClosedLoopController closedLoopController;
+    public PIDController pidController;
     private final ClosedLoopConfig closedLoopConfig;
     private final double gearratio = 24;
-    private final double drumRadius = 0.5; //change
+    private final double drumRadius = 0.02; 
+    public double setPoint;
     private final DCMotor gearbox = DCMotor.getNEO(2);
 
     //simulation components
-    private final ElevatorSim elevatorSim =
-      new ElevatorSim(
+    private final ElevatorSim elevatorSim;
+    private final SparkFlexSim motorSim;
+
+    private final Mechanism2d mech2d;
+    private final MechanismRoot2d mech2dRoot;
+    private final MechanismLigament2d elevatorMech2d;
+
+    public ElevatorSubsystem(){
+        masterMotor = new SparkFlex(Constants.Elevator.masterID, SparkFlex.MotorType.kBrushless);
+        slaveMotor = new SparkFlex(Constants.Elevator.slaveID, SparkFlex.MotorType.kBrushless);
+        masterConfig = new SparkFlexConfig();
+        slaveConfig = new SparkFlexConfig();
+        encoder = masterMotor.getEncoder();
+        pidController = new PIDController(Constants.Elevator.kP, Constants.Elevator.kI, Constants.Elevator.kD);
+
+        elevatorSim =new ElevatorSim(
           gearbox,
           gearratio,
           4,
-          aa,
+          drumRadius,
           Units.inchesToMeters(Constants.Climb.Levels.baseHeight),
           Units.inchesToMeters(Constants.Climb.Levels.maxHeight),
           true,
           0, 0.01, 0.0);
-    private final SparkFlexSim motorSim = new SparkFlexSim(masterMotor, gearbox);
 
-    private final Mechanism2d mech2d = new Mechanism2d(20, 50);
-    private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
-    private final MechanismLigament2d elevatorMech2d = mech2dRoot.append(MechanismLigament2d("Elevator", elevatorSim.getPositionMeters(), 90));
+        
+        motorSim = new SparkFlexSim(null, gearbox);
 
-    public ElevatorSubsystem(){
-        masterMotor = new SparkFlex(Constants.Elevator.masterID, MotorType.kBrushless);
-        slaveMotor = new SparkFlex(Constants.Elevator.slaveID, MotorType.kBrushless);
-        masterConfig = new SparkFlexConfig();
-        slaveConfig = new SparkFlexConfig();
-        encoder = masterMotor.getEncoder();
+        mech2d = new Mechanism2d(20, 50);
+        mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
+        elevatorMech2d = mech2dRoot.append(new MechanismLigament2d("Elevator", elevatorSim.getPositionMeters(), 90));
 
         closedLoopController = masterMotor.getClosedLoopController();
         closedLoopConfig = new ClosedLoopConfig();
@@ -78,16 +86,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void simulationPeriodic(){
-        motorSim.setInputVoltage(motorSim.getAppliedOutput()*RobotController.getBatteryVoltage());
+        motorSim.setBusVoltage(motorSim.getAppliedOutput()*RobotController.getBatteryVoltage());
 
         elevatorSim.update(0.02);
 
-        motorSim.setPosition(elevatorSim.getPositionRotations());
+        motorSim.setPosition((elevatorSim.getPositionMeters()/(Math.PI*drumRadius*2))*gearratio);
 
         RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
     }
 
     public void setPosition(double setPoint){
+        this.setPoint = setPoint;
         closedLoopController.setReference(setPoint, ControlType.kPosition, ClosedLoopSlot.kSlot0,feedForward.calculate(setPoint, 0) );
 
     }
@@ -110,10 +119,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void configureMotors(){
-        closedLoopConfig.pid.kP(Constants.Elevator.kP).kI(Constants.Elevator.kI).kD(Constants.Elevator.kD);
+        closedLoopConfig.p(pidController.getP())
+                        .i(pidController.getI())
+                        .d(pidController.getD());
 
         masterConfig.idleMode(IdleMode.kBrake).voltageCompensation(12.0).smartCurrentLimit(45).closedLoop.apply(closedLoopConfig);
-        masterConfig.encoder.setPositionConversionFactor((Math.PI * drumRadius*2)/gearratio);
+        masterConfig.encoder.positionConversionFactor((2 * Math.PI * drumRadius) / gearratio);
 
         slaveConfig.idleMode(IdleMode.kBrake).follow(masterMotor).voltageCompensation(12.0).smartCurrentLimit(45);
 
@@ -124,7 +135,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Actual Position", encoder.getPosition());
-        SmartDashboard.putNumber("Elevator Target Position", closedLoopController.getReferenceValue());
+        SmartDashboard.putNumber("Elevator Target Position", setPoint);
         SmartDashboard.putNumber("Elevator Voltage", masterMotor.getAppliedOutput());
 
         elevatorMech2d.setLength(encoder.getPosition());
@@ -134,11 +145,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         return runOnce(() -> setPosition(position)).until(() -> isAtPosition(position));
     }
 
-    @Override
-    public void close() {
-        encoder.close();
-        masterMotor.close();
-        slaveMotor.close();
-        m_mech2d.close();
+    public Command simulationCommand(){
+        return run(() -> simulationPeriodic());
     }
 }
