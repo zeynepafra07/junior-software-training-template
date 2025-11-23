@@ -1,0 +1,2 @@
+build/jni/release/wpimath.pdb filter=lfs diff=lfs merge=lfs -text
+build/jni/release/wpimathjni.pdb filter=lfs diff=lfs merge=lfs -text
