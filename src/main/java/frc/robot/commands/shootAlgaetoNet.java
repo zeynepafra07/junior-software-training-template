@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class shootAlgaetoNet extends SequentialCommandGroup{
+public class ShootAlgaetoNet extends SequentialCommandGroup{
     private final ShooterSubsystem shooterSub;
     private final ElevatorSubsystem elevatorSub;
 
-    publicc shootAlgaetoNet(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
+    publicc ShootAlgaetoNet(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
         this.shooterSub = shooterSub;
         this.elevatorSub = elevatorSub;
 

@@ -20,6 +20,16 @@ import frc.robot.Constants;
 import frc.robot.Constants.Elevator;
 import frc.robot.Constants.Climb.Levels;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SparkFlexSim;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.mechanism2d.Mechanism2d;
+import edu.wpi.first.wpilibj.mechanism2d.MechanismLigament2d;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.math.util.Units;
 
 public class ElevatorSubsystem extends SubsystemBase {
     public SparkFlex masterMotor, slaveMotor;
@@ -30,6 +40,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final SparkClosedLoopController closedLoopController;
     private final ClosedLoopConfig closedLoopConfig;
     private final double gearratio = 24;
+    private final double drumRadius = 0.5; //change
+    private final DCMotor gearbox = DCMotor.getNEO(2);
+
+    //simulation components
+    private final ElevatorSim elevatorSim =
+      new ElevatorSim(
+          gearbox,
+          gearratio,
+          4,
+          aa,
+          Units.inchesToMeters(Constants.Climb.Levels.baseHeight),
+          Units.inchesToMeters(Constants.Climb.Levels.maxHeight),
+          true,
+          0, 0.01, 0.0);
+    private final SparkFlexSim motorSim = new SparkFlexSim(masterMotor, gearbox);
+
+    private final Mechanism2d mech2d = new Mechanism2d(20, 50);
+    private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
+    private final MechanismLigament2d elevatorMech2d = mech2dRoot.append(MechanismLigament2d("Elevator", elevatorSim.getPositionMeters(), 90));
 
     public ElevatorSubsystem(){
         masterMotor = new SparkFlex(Constants.Elevator.masterID, MotorType.kBrushless);
@@ -44,6 +73,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         feedForward = new ArmFeedforward(Constants.Elevator.kS, Constants.Elevator.kG, Constants.Elevator.kV, Constants.Elevator.kA);
     
         configureMotors();
+
+        SmartDashboard.putData("Elevator Mechanism", mech2d);
+    }
+
+    public void simulationPeriodic(){
+        motorSim.setInputVoltage(motorSim.getAppliedOutput()*RobotController.getBatteryVoltage());
+
+        elevatorSim.update(0.02);
+
+        motorSim.setPosition(elevatorSim.getPositionRotations());
+
+        RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(elevatorSim.getCurrentDrawAmps()));
     }
 
     public void setPosition(double setPoint){
@@ -72,7 +113,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         closedLoopConfig.pid.kP(Constants.Elevator.kP).kI(Constants.Elevator.kI).kD(Constants.Elevator.kD);
 
         masterConfig.idleMode(IdleMode.kBrake).voltageCompensation(12.0).smartCurrentLimit(45).closedLoop.apply(closedLoopConfig);
-        masterConfig.encoder.setPositionConversionFactor(Math.PI * gearratio);
+        masterConfig.encoder.setPositionConversionFactor((Math.PI * drumRadius*2)/gearratio);
 
         slaveConfig.idleMode(IdleMode.kBrake).follow(masterMotor).voltageCompensation(12.0).smartCurrentLimit(45);
 
@@ -85,10 +126,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elevator Actual Position", encoder.getPosition());
         SmartDashboard.putNumber("Elevator Target Position", closedLoopController.getReferenceValue());
         SmartDashboard.putNumber("Elevator Voltage", masterMotor.getAppliedOutput());
+
+        elevatorMech2d.setLength(encoder.getPosition());
     }
 
     public Command reachPosition(double position){
         return runOnce(() -> setPosition(position)).until(() -> isAtPosition(position));
     }
 
+    @Override
+    public void close() {
+        encoder.close();
+        masterMotor.close();
+        slaveMotor.close();
+        m_mech2d.close();
+    }
 }

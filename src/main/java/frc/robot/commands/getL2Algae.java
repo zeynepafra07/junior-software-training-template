@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class getL2Algae extends SequentialCommandGroup{
+public class GetL2Algae extends SequentialCommandGroup{
     private final ShooterSubsystem shooterSub;
     private final ElevatorSubsystem elevatorSub;
 
-    publicc getL2Algae(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
+    publicc GetL2Algae(ShooterSubsystem shooterSub, ElevatorSubsystem elevatorSub) {
         this.shooterSub = shooterSub;
         this.elevatorSub = elevatorSub;
 

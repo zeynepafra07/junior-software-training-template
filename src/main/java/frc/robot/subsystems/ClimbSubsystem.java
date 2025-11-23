@@ -91,4 +91,9 @@ public class ClimbSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Climb Motor Voltage", climbMotor.getAppliedOutput());
     }
 
+    @Override
+    public void close() {
+        climbMotor.close();
+    }
+
 }

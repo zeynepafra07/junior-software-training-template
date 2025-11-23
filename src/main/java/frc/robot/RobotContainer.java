@@ -24,16 +24,16 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 import frc.robot.commands.CloseClimb;
 import frc.robot.commands.OpenClimb;
-import frc.robot.commands.getL2ALgae;
-import frc.robot.commands.getL3ALgae;
+import frc.robot.commands.GetL2ALgae;
+import frc.robot.commands.GetL3ALgae;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Outtake;
 import frc.robot.commands.L1Shooting;
 import frc.robot.commands.L2Shooting;
 import frc.robot.commands.L3Shooting;
 import frc.robot.commands.L4Shooting;
-import frc.robot.commands.shootAlgaeToBarge;
-import frc.robot.commands.shootAlgaetoNet;
+import frc.robot.commands.ShootAlgaeToBarge;
+import frc.robot.commands.ShootAlgaetoNet;
 import frc.robot.commands.NormalMode;
 import frc.robot.commands.FastMode;
 import frc.robot.commands.SlowMode;
@@ -67,18 +67,18 @@ public class RobotContainer
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final Command closeClimbCommand = new closeClimb(climb);
-  private final Command openClimbCommand = new openClimb(climb, elevator);
-  private final Command getL2ALgaeCommand = new getL2ALgae(shooter, elevator);
-  private final Command getL3ALgaeCommand = new getL3ALgae(shooter, elevator);
+  private final Command closeClimbCommand = new CloseClimb(climb);
+  private final Command openClimbCommand = new OpenClimb(climb, elevator);
+  private final Command getL2ALgaeCommand = new GetL2ALgae(shooter, elevator);
+  private final Command getL3ALgaeCommand = new GetL3ALgae(shooter, elevator);
   private final Command intakeCommand = new Intake(intake);
   private final Command outtakeCommand = new Outtake(intake);
   private final Command L1ShootCommand = new L1Shooting(shooter, elevator);
   private final Command L2ShootCommand = new L2Shooting(shooter, elevator);
   private final Command L3ShootCommand = new L3Shooting(shooter, elevator);
   private final Command L4ShootCommand = new L4Shooting(shooter, elevator);
-  private final Command shootAlgaeBargeCommand = new shootAlgaeToBarge(shooter, elevator);
-  private final Command shootAlgaetoNetCommand = new shootAlgaetoNet(shooter, elevator);
+  private final Command shootAlgaeBargeCommand = new ShootAlgaeToBarge(shooter, elevator);
+  private final Command shootAlgaetoNetCommand = new ShootAlgaetoNet(shooter, elevator);
   private final Command normalModeCommand = new NormalMode(climb);
   private final Command fastModeCommand = new FastMode(climb);
   private final Command slowModeCommand = new SlowMode(climb);
@@ -142,7 +142,7 @@ public class RobotContainer
 
 
 
-  AutoBuilder.configurePathPlanner(
+  AutoBuilder.configureHolonomic(
     (Pose2d targetPose, Command command) -> drivebase.driveToPoseCommand(targetPose),
     (Pose2d initialPose) -> drivebase.resetOdometry(initialPose),
     drivebase::getPose,
@@ -207,14 +207,9 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
-     
-
-//      driverXbox.b().whileTrue(
-//          drivebase.driveToPose(
-//              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-//                              );
-
+      elevator.setDefaultCommand(elevator.simulationPeriodic());
     }
+    
     if (DriverStation.isTest())
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!

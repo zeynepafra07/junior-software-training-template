@@ -62,4 +62,10 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Sensor", hasCoral());
         SmartDashboard.putNumber("Intake Voltage", intakeMotor.getAppliedOutput());
     }
+
+    @Override
+    public void close() {
+        intakeMotor.close();
+        intakeSensor.close();
+    }
 }
