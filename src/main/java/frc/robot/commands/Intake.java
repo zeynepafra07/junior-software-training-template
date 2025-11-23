@@ -13,7 +13,7 @@ public class Intake extends CommandBase{
     private final IntakeSubsystem intakeSub;
     private final Timer timer;
     private final timerOn, finished;
-    private final holdTime = 12.0; //unknown change later
+    private final holdTime = 1.5;
 
     public Intake(IntakeSubsystem intakeSub) {
         this.intakeSub = intakeSub;

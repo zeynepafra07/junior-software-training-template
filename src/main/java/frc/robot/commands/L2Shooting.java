@@ -20,11 +20,11 @@ public class L1Shooting extends SequentialCommandGroup {
         addRequirements(shooterSub, elevatorSub);
 
         addCommands(
-            elevatorSub.setPosition(Constants.Climb.Levels.L2).withTimeout(3),
+            elevatorSub.setPosition(Constants.Climb.Levels.L2).withTimeout(1),
             new InstantCommand(() -> shooterSub.feed(), shooterSub),
-            new WaitCommand(0.3),
+            new WaitCommand(0.1),
             new InstantCommand(() -> shooterSub.shootL2(), shooterSub),
-            new WaitCommand(1.5),
+            new WaitCommand(0.7),
             new InstantCommand(() -> shooterSub.stop(), shooterSub),
             elevatorSub.setPosition(Constants.Climb.Levels.SAFE).withTimeout(3);
         );

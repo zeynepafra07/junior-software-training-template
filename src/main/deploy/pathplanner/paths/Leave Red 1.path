@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 9.41534090909091,
+        "y": 0.79280303030303
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 9.26791812711335,
+        "y": 0.5235738531135368
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 11.656534090909092,
+        "y": 1.4178977272727276
+      },
+      "prevControl": {
+        "x": 10.505226493520427,
+        "y": 1.091800754871822
+      },
+      "nextControl": {
+        "x": 12.81463552999264,
+        "y": 1.745918990986135
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 13.798626893939394,
+        "y": 2.408901515151515
+      },
+      "prevControl": {
+        "x": 13.551276646441629,
+        "y": 2.3725992416305086
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "redleave1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4 Shoot Command",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4 Shoot Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 121.55138494831354
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -2.0825652797309377
+  },
+  "useDefaultConstraints": true
+}

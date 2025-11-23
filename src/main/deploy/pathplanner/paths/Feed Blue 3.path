@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.558049242424243,
+        "y": 5.427651515151515
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.329449024031364,
+        "y": 5.559447283084796
+      },
+      "isLocked": false,
+      "linkedName": "blueleave33"
+    },
+    {
+      "anchor": {
+        "x": 3.7132575757575754,
+        "y": 6.479640151515151
+      },
+      "prevControl": {
+        "x": 4.567045454545454,
+        "y": 6.395785984848485
+      },
+      "nextControl": {
+        "x": 3.397067791995429,
+        "y": 6.510694505277505
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6626420454545454,
+        "y": 7.1428503787878785
+      },
+      "prevControl": {
+        "x": 1.8654961982471145,
+        "y": 6.99673332743928
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "blueintake3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Command",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 128.78436410029735
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -118.70595254340101
+  },
+  "useDefaultConstraints": true
+}

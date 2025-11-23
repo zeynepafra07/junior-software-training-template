@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 15.91785037878788,
+        "y": 0.8004261363636362
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 16.163640909910796,
+        "y": 0.7547422791456415
+      },
+      "isLocked": false,
+      "linkedName": "redintake2"
+    },
+    {
+      "anchor": {
+        "x": 14.065435606060607,
+        "y": 2.584232954545454
+      },
+      "prevControl": {
+        "x": 13.80792845304972,
+        "y": 2.6625314182976063
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "L4 Shoot Command",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4 Shoot Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.57783868126133
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -52.618546487569006
+  },
+  "useDefaultConstraints": true
+}

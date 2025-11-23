@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -14,11 +15,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.climb.ClimbSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+
 import frc.robot.commands.CloseClimb;
 import frc.robot.commands.OpenClimb;
 import frc.robot.commands.getL2ALgae;
@@ -35,8 +38,17 @@ import frc.robot.commands.NormalMode;
 import frc.robot.commands.FastMode;
 import frc.robot.commands.SlowMode;
 import frc.robot.commands.ResetEncoder;
+
 import java.io.File;
 import swervelib.SwerveInputStream;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.HashMap;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -71,6 +83,8 @@ public class RobotContainer
   private final Command fastModeCommand = new FastMode(climb);
   private final Command slowModeCommand = new SlowMode(climb);
   private final Command resetEncoderCommand = new ResetEncoder(elevator);
+
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -128,15 +142,47 @@ public class RobotContainer
 
 
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  AutoBuilder.configurePathPlanner(
+    (Pose2d targetPose, Command command) -> drivebase.driveToPoseCommand(targetPose),
+    (Pose2d initialPose) -> drivebase.resetOdometry(initialPose),
+    drivebase::getPose,
+    () -> {
+      var alliance = DriverStation.getAlliance();
+      if(alliance.isPresent())
+      {
+        return alliance.get() ==  DriverStation.Alliance.Blue;
+      }
+      return false;
+    },
+    drivebase
+    );
+
   public RobotContainer()
   {
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
+
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+
+    NamedCommands.registerCommand("Intake Command", new Intake(intake));
+    NamedCommands.registerCommand("L4 Shoot Command", new L4Shooting(shooter, elevator));
+
+    Command auto1 = AutoBuilder.buildAutoCommand("Blue_1", drivebase, true);
+    Command auto2 = AutoBuilder.buildAutoCommand("Blue_2", drivebase, true);
+    Command auto3 = AutoBuilder.buildAutoCommand("Blue_3", drivebase, true);
+    Command auto4 = AutoBuilder.buildAutoCommand("Red_1", drivebase, true);
+    Command auto5 = AutoBuilder.buildAutoCommand("Red_2", drivebase, true);
+    Command auto6 = AutoBuilder.buildAutoCommand("Red_3", drivebase, true);
+
+    autoChooser.setDefaultOption("Blue Auto 1", auto1);
+    autoChooser.addOption("Blue Auto 2", auto2);
+    autoChooser.addOption("Blue Auto 3", auto3);
+    autoChooser.addOption("Red Auto 1", auto4);
+    autoChooser.addOption("Red Auto 2", auto5);
+    autoChooser.addOption("Red Auto 3", auto6);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    
   }
 
   /**
@@ -208,8 +254,7 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return autoChooser.getSelected();
   }
 
   public void setMotorBrake(boolean brake)

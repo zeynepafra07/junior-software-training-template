@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 13.798626893939394,
+        "y": 2.408901515151515
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 13.536423776685481,
+        "y": 2.4978379370786197
+      },
+      "isLocked": false,
+      "linkedName": "redleave1"
+    },
+    {
+      "anchor": {
+        "x": 15.91785037878788,
+        "y": 0.8004261363636362
+      },
+      "prevControl": {
+        "x": 16.228413286728397,
+        "y": 0.8056989674331034
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "redintake1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Command",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Command"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -52.618546487569006
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 121.55138494831354
+  },
+  "useDefaultConstraints": true
+}
