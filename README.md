@@ -1,67 +1,87 @@
-# Robot Software Task Documentation
+# Junior Software Training Template
 
-This document provides a detailed overview of the robot software tasks and setup process for the team.  
-It explains how to prepare the development environment, structure the project, and manage subsystem assignments.
-
----
-
-## 🧭 Overview
-This document serves as a guide for new and existing team members working on the robot’s software.  
-It outlines how to:
-- Set up the required tools and dependencies  
-- Clone and manage the project repository  
-- Understand the folder and code structure  
-- Collaborate effectively during development
+Bu proje, robot yazılımı eğitiminde kullanılmak üzere hazırlanmış bir şablondur.  
+Depo: https://github.com/zeynepafra07/junior-software-training-template.git
 
 ---
 
-## ⚙️ Initial Setup
+## 🎮 Kontrolör Tuş Atamaları
 
-### 1. Install WPILib
-Download and install the latest **WPILib** development environment:
-- Visit [WPILib Installation Guide](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/index.html)
-- Make sure `VS Code` and the **FRC Plugin** are correctly configured.
+Kontrolör şeması ve hangi tuşa hangi komutun atandığı görsel olarak burada:  
+[Controller Scheme](https://www.padcrafter.com/?templates=Controller+Scheme&plat=0&leftBumper=l1+shoot&leftTrigger=l2+shoot&rightBumper=l3+shoot&rightTrigger=l4+shoot&col=%23242424%2C%23606A6E%2C%23FFFFFF&yButton=score+algae+to+net&xButton=intake+algae+L2&aButton=score+algae+to+barge&rightStick=swerve+drive&backButton=slow+mode&startButton=fast+mode&dpadUp=intake&dpadDown=outtake&dpadRight=open+climb&dpadLeft=close+climb&leftStick=move+elevator+manual&leftStickClick=reset+encoder&rightStickClick=&bButton=intake+algae+L3)
 
-### 2. Fork the Main Swerve Template
-- Go to the official **Main Swerve Template** repository on GitHub.  
-- Click **Fork** to create your own copy.  
-- Clone it locally to your development machine using:
-  ```bash
-  git clone https://github.com/Kelrot/junior-software-training-template.git
-  ```
-
-### 3. Open in VS Code
-Open the cloned folder in **VS Code (WPILib)** and ensure the Gradle build completes without errors.
-
----
-
-## 🧩 Project Structure
-
-The project is organized into the following main sections:
-
-| Folder / Module | Description |
-| ---------------- | ------------ |
-| `src/main/java/frc/robot/` | Root directory for robot code |
-| `subsystems/` | Code for robot mechanisms (Drive, Elevator, Intake, etc.) |
-| `commands/` | Command-based logic controlling subsystems |
-| `utils/` | Utility classes such as wrappers, logging, or math helpers |
-
+### Tuş Atamaları
+- Left Bumper (L1) → shoot  
+- Left Trigger (L2) → shoot  
+- Right Bumper (L3) → shoot  
+- Right Trigger (L4) → shoot  
+- Y Button → score algae to net  
+- X Button → intake algae L2  
+- A Button → score algae to barge  
+- Right Stick → swerve drive  
+- Back Button → slow mode  
+- Start Button → fast mode  
+- D-Pad Up → intake  
+- D-Pad Down → outtake  
+- D-Pad Right → open climb  
+- D-Pad Left → close climb  
+- Left Stick → move elevator manual  
+- Left Stick Click → reset encoder  
+- B Button → intake algae L3
 
 ---
 
-## 🧠 Development Guidelines
+## 🧰 Proje Yapısı & Kullanım
 
-- Follow WPILib command-based design principles.  
-- Use constants for tunable parameters — avoid hardcoded values in logic.  
-- Commit frequently with meaningful messages.  
-- Use pull requests for reviewing and merging changes.  
-- Test each subsystem independently before full robot integration.
+### Başlangıç
+1. WPILib’in en güncel geliştirme ortamını kurun ve VS Code ile FRC eklentisinin aktif olduğundan emin olun.  
+2. Projeyi klonlayın:
+```bash
+git clone https://github.com/zeynepafra07/junior-software-training-template.git
+```
+3. VS Code içerisinde projeyi açın ve Gradle yapılandırmasını çalıştırın.
+
+### Klasör Yapısı
+- `src/main/java/frc/robot/` — Robot kodunun ana dizini  
+- `subsystems/` — Robot mekanizmaları için (Drive, Elevator, Intake vb.)  
+- `commands/` — Komut-temelli mantık kısmı  
+- `utils/` — Yardımcı sınıflar, loglama, matematiksel araçlar
+
+### Geliştirme İlkeleri
+- WPILib’in komut-temelli (command-based) mimarisine uyun.  
+- Ayarlanabilir parametreler için `constants` sınıflarını kullanın; kod içerisinde sabit değerleri doğrudan yazmaktan kaçının.  
+- Sık ve anlamlı commit’ler yapın. Kod incelemesi (pull requests) ile ilerleyin.  
+- Her alt sistemi bağımsız olarak test edin, ardından bütünleştirin.
+
+### Simülasyon & Test
+1. WPILib simülasyon araçlarını kullanarak robot davranışlarını sanal ortamda deneyin.  
+2. Motor yönleri, PID kontrolü ve tetik mappings (trigger mappings) gibi detayları doğrulayın.  
+3. Fiziksel robota geçmeden önce sanal testlerden geçin.  
+4. Elde edilen sonuçları ekip içinde dokümante edin.
 
 ---
 
-## 🧪 Simulation & Testing
+## ⚙️ Kod Standartları
+- Değişken ve sınıf isimleri: CamelCase kullanın.  
+- Method isimleri: lowerCamelCase kullanın.  
+- Alt sistem ve komut isimleri: açık ve anlamlı olsun (ör. `DriveSubsystem`, `ScoreAlgaeCommand`).  
+- Magic number’lar kullanmayın: Tüm sabitleri `Constants.java` içinde tutun.  
+- Yorum satırları: Kodun ne yaptığını ve neden yaptığını açıklayın, gereksiz yorum yazmayın.
 
-1. Use **WPILib Simulation** to test robot behavior virtually.  
-2. Verify motor direction, PID control, and trigger mappings.  
-3. Once stable, deploy to the robot and validate physical performance.  
-4. Document results in the shared Google Docs file for tracking progress.
+---
+
+## 📝 Sürüm Notları
+- v1.0.0 – Temel robot alt sistemleri ve komut şablonları eklenmiştir.  
+- v1.1.0 – Kontrolör tuş atamaları güncellendi, simülasyon destekleri eklendi.  
+- v1.2.0 – Kod standartları ve örnek komutlar eklenmiştir.
+
+---
+
+## 📄 Lisans
+Bu proje **Apache License 2.0** altında yayımlanmıştır.
+
+---
+
+## ℹ️ İletişim & Katkı
+Her türlü fikir, öneri veya hata bildirimi için GitHub üzerindeki “Issues” sekmesini kullanabilirsiniz.  
+Katkılar memnuniyetle karşılanır; katkıda bulunmadan önce bir issue açmanız önerilir.
